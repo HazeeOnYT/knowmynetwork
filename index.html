@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowMyNetwork 🌎</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .network-info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to KnowMyNetwork 🌎</h1>
+    <div class="network-info">
+        <p id="ip">IP Address: Loading...</p>
+        <p id="isp">ISP: Loading...</p>
+        <p id="location">Location: Loading...</p>
+        <p id="ping">Ping: Loading...</p>
+    </div>
+
+    <script>
+        // Fetching IP Address and other details
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ip').textContent = `IP Address: ${data.ip}`;
+                document.getElementById('isp').textContent = `ISP: ${data.org}`;
+                document.getElementById('location').textContent = `Location: ${data.city}, ${data.region}, ${data.country_name}`;
+            })
+            .catch(error => console.error('Error fetching IP data:', error));
+
+        // Fetching Ping
+        function calculatePing() {
+            const startTime = Date.now();
+            fetch('https://api.ipify.org')
+                .then(() => {
+                    const endTime = Date.now();
+                    const ping = endTime - startTime;
+                    document.getElementById('ping').textContent = `Ping: ${ping} ms`;
+                })
+                .catch(error => console.error('Error calculating ping:', error));
+        }
+
+        // Calculate ping on page load and every 10 seconds
+        calculatePing();
+        setInterval(calculatePing, 10000);
+    </script>
+</body>
+</html>
